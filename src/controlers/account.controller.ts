@@ -9,8 +9,11 @@ import {
   findAccount,
   validatePassword,
   updateAccount,
+  addCandidateToFavorites,
+  removeCandidateFromFavorites,
 } from "../service/account.service";
 import { signJwt } from "../utils/jwt.utils";
+import mongoose, { ObjectId } from "mongoose";
 
 // create account
 export async function createAccountHandler(
@@ -94,5 +97,42 @@ export async function updateAccountHandler(
     console.error(e);
     res.status(401).send("Invalid Credentials");
     return;
+  }
+}
+
+// Add candidate to favorites
+export async function addCandidateToFavoritesHandler(
+  req: Request,
+  res: Response
+) {
+  try {
+    const cin = res.locals.account.cin;
+    const candidateId = req.params.candidateId as unknown as ObjectId;
+
+    const updatedFavorites = await addCandidateToFavorites(cin, candidateId);
+    res.status(200).send(updatedFavorites);
+  } catch (e: any) {
+    console.error(e);
+    res.status(400).send(e.message);
+  }
+}
+
+// Remove candidate from favorites
+export async function removeCandidateFromFavoritesHandler(
+  req: Request,
+  res: Response
+) {
+  try {
+    const cin = res.locals.account.cin;
+    const candidateId = req.params.candidateId as unknown as ObjectId;
+
+    const updatedFavorites = await removeCandidateFromFavorites(
+      cin,
+      candidateId
+    );
+    res.status(200).send(updatedFavorites);
+  } catch (e: any) {
+    console.error(e);
+    res.status(400).send(e.message);
   }
 }

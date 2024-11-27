@@ -1,4 +1,4 @@
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import AccountModel, {
   AccountDocument,
   AccountInput,
@@ -37,7 +37,7 @@ export async function validatePassword({
 }
 
 export async function findAccount(query: FilterQuery<AccountDocument>) {
-  return AccountModel.findOne(query).lean();
+  return AccountModel.findOne(query).lean().populate("favorites");
 }
 
 // update account
@@ -46,4 +46,55 @@ export async function updateAccount(
   update: any
 ) {
   return AccountModel.findOneAndUpdate(query, update, { new: true }).lean();
+}
+
+// add candidate to favorites
+export async function addCandidateToFavorites(
+  cin: string,
+  candidateId: mongoose.Schema.Types.ObjectId
+) {
+  const account = await AccountModel.findOne({ cin });
+
+  if (!account) {
+    throw new Error("Account not found.");
+  }
+
+  if (!account.favorites) {
+    account.favorites = [];
+  }
+
+  if (account.favorites.includes(candidateId)) {
+    throw new Error("Candidate is already in your favorites.");
+  }
+
+  account.favorites.push(candidateId);
+  await account.save();
+
+  return account.favorites;
+}
+
+// Service function to remove a candidate from favorites
+export async function removeCandidateFromFavorites(
+  cin: string,
+  candidateId: mongoose.Schema.Types.ObjectId
+) {
+  const account = await AccountModel.findOne({ cin });
+
+  if (!account) {
+    throw new Error("Account not found.");
+  }
+
+  if (!account.favorites) {
+    account.favorites = [];
+  }
+
+  const index = account.favorites.indexOf(candidateId);
+  if (index === -1) {
+    throw new Error("Candidate is not in your favorites.");
+  }
+
+  account.favorites.splice(index, 1);
+  await account.save();
+
+  return account.favorites;
 }

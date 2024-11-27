@@ -1,22 +1,34 @@
 import mongoose from "mongoose";
 
 // Comment Schema
-const commentSchema = new mongoose.Schema({
-  accountId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Account",
-    required: true,
+const commentSchema = new mongoose.Schema(
+  {
+    content: { type: String, required: true },
+    account: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Account",
+      required: true,
+    },
+    candidate: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Candidate",
+      required: true,
+    },
   },
-  candidateId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Candidate",
-    required: true,
-  },
-  comment: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
-// Comment Model
-const Comment = mongoose.model("Comment", commentSchema);
+export interface CommentInput {
+  content: string;
+  account: mongoose.Schema.Types.ObjectId;
+  candidate: mongoose.Schema.Types.ObjectId;
+}
 
-export default Comment;
+export interface CommentDocument extends CommentInput, mongoose.Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const CommentModel = mongoose.model<CommentDocument>("Comment", commentSchema);
+
+export default CommentModel;
