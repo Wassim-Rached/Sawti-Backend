@@ -7,7 +7,6 @@ const accountSchema = new mongoose.Schema<AccountDocument>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   password: { type: String, required: true },
-  votedFor: { type: mongoose.Schema.Types.ObjectId, ref: "Candidate" },
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Candidate" }],
 });
 
@@ -16,7 +15,6 @@ export interface AccountInput {
   firstName: string;
   lastName: string;
   password: string;
-  votedFor?: mongoose.Schema.Types.ObjectId;
   favorites?: mongoose.Schema.Types.ObjectId[];
 }
 

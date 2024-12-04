@@ -99,8 +99,6 @@ function routes(app: Express) {
   );
 
   // End Vote routes
-
-  //
 }
 
 export default routes;

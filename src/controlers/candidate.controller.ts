@@ -70,12 +70,11 @@ export async function addCommentHandler(req: Request, res: Response) {
     const candidateId = req.params.candidateId as unknown as ObjectId;
     const { cin } = res.locals.account;
 
-    // Call the service to add the comment
     const comment = await addCommentOnCandidate(content, cin, candidateId);
-    res.status(201).send(comment); // Return the created comment
+    res.status(201).send(comment);
   } catch (e: any) {
     console.error(e);
-    res.status(400).send(e.message); // Send error message if any error occurs
+    res.status(400).send(e.message);
   }
 }
 
@@ -84,12 +83,11 @@ export async function removeCommentHandler(req: Request, res: Response) {
   try {
     const commentId = req.params.commentId as unknown as ObjectId;
 
-    // Call the service to remove the comment
     await removeCommentFromCandidate(commentId);
-    res.sendStatus(204); // Return the deleted comment
+    res.sendStatus(204);
   } catch (e: any) {
     console.error(e);
-    res.status(400).send(e.message); // Send error message if any error occurs
+    res.status(400).send(e.message);
   }
 }
 
@@ -101,12 +99,11 @@ export async function getCommentsForCandidateHandler(
   try {
     const candidateId = req.params.candidateId as unknown as ObjectId;
 
-    // Call the service to get comments for the candidate
     const comments = await getCommentsForCandidate(candidateId);
-    res.status(200).send(comments); // Return the comments
+    res.status(200).send(comments);
   } catch (e: any) {
     console.error(e);
-    res.status(400).send(e.message); // Send error message if any error occurs
+    res.status(400).send(e.message);
   }
 }
 
@@ -118,10 +115,8 @@ export async function getVotesByCandidateIdHandler(
   try {
     const candidateId = req.params.candidateId;
 
-    // Get vote count from service
     const voteCount = await getVoteCountByCandidateId(candidateId);
 
-    // Return the vote count
     res.send({ candidateId, voteCount });
   } catch (e) {
     console.error(e);

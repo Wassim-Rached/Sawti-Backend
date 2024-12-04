@@ -14,8 +14,7 @@ export const accountSchema = object({
   password: string({
     required_error: "Password is required",
   }).min(6, "Password too short - should be 6 chars minimum"),
-  votedFor: string().optional(), // Represents ObjectId reference
-  favorites: z.array(string()).optional(), // Represents an array of ObjectId references
+  favorites: z.array(string()).optional(),
 });
 
 // Zod Schema for Create Account
@@ -33,20 +32,11 @@ export const createAccountSchema = object({
     password: string({
       required_error: "Password is required",
     }).min(6, "Password too short - should be 6 chars minimum"),
-    passwordConfirmation: string({
-      required_error: "Password confirmation is required",
-    }),
-  }).refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords do not match",
-    path: ["passwordConfirmation"],
   }),
 });
 
 // Export type for Create Account Input
-export type CreateAccountInput = Omit<
-  TypeOf<typeof createAccountSchema>,
-  "body.passwordConfirmation"
->;
+export type CreateAccountInput = TypeOf<typeof createAccountSchema>;
 
 // zod schema for login
 export const loginSchema = object({

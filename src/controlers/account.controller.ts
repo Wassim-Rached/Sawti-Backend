@@ -69,7 +69,8 @@ export async function getAccountByCinHandler(req: Request, res: Response) {
       res.sendStatus(404);
       return;
     }
-    res.send(account);
+    const { password, ...accountWithoutPassword } = account;
+    res.send(accountWithoutPassword);
     return;
   } catch (e: any) {
     console.error(e);
