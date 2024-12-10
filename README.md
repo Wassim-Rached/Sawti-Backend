@@ -19,7 +19,7 @@
   - **Authentication**: JSON Web Tokens (JWT)
 
 - **Architecture Diagram**:
-  ![Arch](./sawti_arch.png)
+  ![Arch](https://github.com/Wassim-Rached/Sawti-Web-Client/raw/main/public/sawti_arch.png)
 
 ---
 
